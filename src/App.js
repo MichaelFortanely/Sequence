@@ -1,10 +1,8 @@
 import './App.css';
-import { startTransition, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import FlexRow from './FlexRow';
 import SequenceBoard from './SequenceBoard';
-import Timer from './Timer';
 import Player from './Player'
-import Timed  from './Timed';
 
 function App() {
   let started = false
@@ -14,8 +12,8 @@ function App() {
   const [chipCoords, setChipCoords] = useState([-1, -1])
   const [topPlayerHand, setTopPlayerHand] = useState([])
   const [bottomPlayerHand, setBottomPlayerHand] = useState([])
-  const [seconds, setSeconds] = useState(60)
-  const [turn, setTurn] = useState('Bottom')
+  const [selected, setSelected] = useState('None')
+  const [nextMove, setNextMove] = useState()
   //use the turn variable when playing cards
 
 
@@ -41,7 +39,7 @@ function App() {
       const cardIndex = Math.floor(Math.random() * (cardsInDeck.length + 1))
       returnVal.push(cardsInDeck[cardIndex])
       copy.splice(cardIndex)
-      if(copy.length == 0){
+      if(copy.length === 0){
         setCardsInDeck(noJokerDeck)
       } else{
         setCardsInDeck(copy)
@@ -53,12 +51,52 @@ function App() {
   useEffect(() => {
     //need a function to get single card
     if(!started){
-      setTopPlayerHand([drawCards(1), drawCards(1), drawCards(1), drawCards(1), drawCards(1), drawCards(1), drawCards(1),])
+      setTopPlayerHand(drawCards(7))
       setBottomPlayerHand(drawCards(7))
       // console.log(topPlayerHand, bottomPlayerHand)
     }
     started = true
   }, [])
+
+  useEffect(() => {
+    console.log(chipCoords)
+    if(chipCoords[0] !== -1 && chipCoords[1] !== -1){
+      console.log(`#letter${chipCoords[0]}-${chipCoords[1]}`)
+      const clickedBoardCard = document.querySelector(`#letter${chipCoords[0]}-${chipCoords[1]}`)
+      console.log(clickedBoardCard)
+      console.log('width is ')
+      console.log(clickedBoardCard.style.borderWidth)
+      clickedBoardCard.style.borderColor = 'blue'
+      // for(let i = 0; i < 10; i++){
+      //   for(let j = 0; i < 10; j++){
+      //     const item = document.querySelector(`#letter${chipCoords[i]}-${chipCoords[j]}`)
+      //     // console.log(item)
+      //     // if(i !== chipCoords[0] && j !== chipCoords[1]){
+      //     //   item.style.borderWidth = 'green'
+      //     // }
+      //   }
+      // }
+    }
+  }, [chipCoords])
+
+
+  useEffect(() => {
+    // coolFunc(this.state.first)
+    const playerCards = document.querySelector('.bottom').childNodes
+    let found = false
+    for(let i = 0; i < playerCards.length; i++){
+      const cardName = playerCards[i].firstChild.alt
+      if(cardName === selected && !found){
+        found = true
+        console.log(cardName + ' selected')
+        console.log(playerCards[i])
+        playerCards[i].firstChild.style.borderWidth = '3px';
+        console.log(playerCards[i].firstChild.style.borderWidth)
+      } else{
+        playerCards[i].firstChild.style.borderWidth = '0px';
+      }
+    }
+  }, [selected])
   const nameRows = [
     ['red_joker.png', '4_of_spades.png', '3_of_spades.png', '2_of_spades.png', 'ace_of_spades.png', 'ace_of_clubs.png', '2_of_clubs.png', '3_of_clubs.png', '4_of_clubs.png', 'black_joker.png'],
     ['4_of_diamonds.png', 'king_of_spades.png', '5_of_spades.png', '6_of_spades.png', '7_of_spades.png', '7_of_clubs.png', '6_of_clubs.png', '5_of_clubs.png', 'king_of_clubs.png', '4_of_hearts.png'],
@@ -79,11 +117,8 @@ function App() {
       </table>`
       <SequenceBoard chipToNum={chipToNum} grid={grid} setGrid={setGrid}/>
       <div id='pane'>
-        <Timer/>
-        <Timed />
-        <Player cards={topPlayerHand} setHand={setTopPlayerHand} color='red' orientation='top'/>
-        <Player cards={bottomPlayerHand} setHand={setBottomPlayerHand} color='blue' orientation='bottom'/>
-        <p>text</p>
+        <Player selected={selected} setSelected={setSelected} cards={topPlayerHand} setHand={setTopPlayerHand} color='red' orientation='top'/>
+        <Player selected={selected} setSelected={setSelected} cards={bottomPlayerHand} setHand={setBottomPlayerHand} color='blue' orientation='bottom'/>
       </div>
     </main>
   );

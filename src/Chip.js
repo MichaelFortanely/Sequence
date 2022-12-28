@@ -1,10 +1,10 @@
 import React from 'react'
 
-const Chip = ({num, chipToNum,setGrid, grid}) => {
+const Chip = ({num}) => {
  if(num === 0 || num === 9 || num === 90 || num === 99){
     return (
         <div className='chip-container'>
-            <div className='black pokerchip' id={`${Math.floor(num/10)}-${num % 10}`}  style={ {position: 'relative',left: `${-60 + 63 * (num % 10)}px`, top: `${-1000 + (840/9) * Math.floor(num/10)}px`}}></div>
+            <div className='black pokerchip' id={`${Math.floor(num/10)}-${num % 10}`}  style={ {position: 'relative',left: `${-60 + 61 * (num % 10)}px`, top: `${-980 + (810/9) * Math.floor(num/10)}px`}}></div>
    </div>
 ) 
 
@@ -12,7 +12,7 @@ const Chip = ({num, chipToNum,setGrid, grid}) => {
 
      return (
          <div className='chip-container'>
-            <div className='black pokerchip' id={`${Math.floor(num/10)}-${num % 10}`} style={ {display: 'none', position: 'relative',left: `${-60 + 63 * (num % 10)}px`, top: `${-1000 + (840/9) * Math.floor(num/10)}px`}}></div>
+            <div className='black pokerchip' id={`${Math.floor(num/10)}-${num % 10}`} style={ {display: 'none', position: 'relative',left: `${-60 + 61 * (num % 10)}px`, top: `${-980 + (810/9) * Math.floor(num/10)}px`}}></div>
     </div>
 ) 
 }

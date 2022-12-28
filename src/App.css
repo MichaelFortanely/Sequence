@@ -128,7 +128,7 @@ img:hover {
 #pane{
   position: absolute;
   left: 700px;
-  border-style: dashed;
+  /* border-style: dashed; */
   width: 60vw;
   top: 0px;
   height: 100vh;
@@ -155,11 +155,12 @@ body{
 }
 
 .bottom{
-  top: 700px;
+  top: 300px;
 }
 
 .top{
   top: 350px;
+  display: none;
 }
 
 .progress {
@@ -178,5 +179,17 @@ body{
   font-size: 45px;
 }
 
+.card-in-hand{
+  border-style: solid;
+  border-width: 0px;
+  border-color: yellow;
+}
 
+.board-card{
+  border-style: solid;
+  border-width: 2px;
+  border-color: green;
+}
+
+/* create a key frame animation to move the card slightly up when it is selected*/
 

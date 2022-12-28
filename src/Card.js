@@ -1,8 +1,9 @@
 import React from 'react'
 
-const Card = ({cardName}) => {
+const Card = ({cardName, selected, setSelected}) => {
   return (
-    <div><img className='card-in-hand' onClick={(e) => {console.log(e.target)
+    <div><img className='card-in-hand' onClick={(e) => {
+        setSelected(e.target.alt)
     }} src={'PNG-cards/' + cardName} alt={cardName}/></div>
   )
 }
