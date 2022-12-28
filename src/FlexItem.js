@@ -1,5 +1,7 @@
 import React from 'react'
 
+//to make this project look like really professional I could make the use of react router and context
+
 const FlexItem = ({name, row, col, setChipCoords, grid}) => {
   return (
     <td>
@@ -12,7 +14,7 @@ const FlexItem = ({name, row, col, setChipCoords, grid}) => {
       element.style.display = ''
       element.classList.remove('black')
       element.classList.add('green')
-      console.log(element.style.display)
+      // console.log(element.style.display)
       }} src={'PNG-cards/' + name} alt={name}/>
     </td>
   )
