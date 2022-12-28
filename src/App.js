@@ -4,6 +4,7 @@ import FlexRow from './FlexRow';
 import SequenceBoard from './SequenceBoard';
 import Timer from './Timer';
 import Player from './Player'
+import Timed  from './Timed';
 
 function App() {
   let started = false
@@ -13,6 +14,11 @@ function App() {
   const [chipCoords, setChipCoords] = useState([-1, -1])
   const [topPlayerHand, setTopPlayerHand] = useState([])
   const [bottomPlayerHand, setBottomPlayerHand] = useState([])
+  const [seconds, setSeconds] = useState(60)
+  const [turn, setTurn] = useState('Bottom')
+  //use the turn variable when playing cards
+
+
   const chipToNum = {
     'all': -1,
     'open': 0,
@@ -74,8 +80,10 @@ function App() {
       <SequenceBoard chipToNum={chipToNum} grid={grid} setGrid={setGrid}/>
       <div id='pane'>
         <Timer/>
+        <Timed />
         <Player cards={topPlayerHand} setHand={setTopPlayerHand} color='red' orientation='top'/>
         <Player cards={bottomPlayerHand} setHand={setBottomPlayerHand} color='blue' orientation='bottom'/>
+        <p>text</p>
       </div>
     </main>
   );

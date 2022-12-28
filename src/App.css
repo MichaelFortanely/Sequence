@@ -21,6 +21,13 @@ img{
 img:hover {
   transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
+.card-in-hand{
+  transform: scale(1.5);
+}
+
+.card-in-hand:hover{
+  transform: scale(2);
+}
 
 .chip-container{
   position: absolute;
@@ -127,26 +134,49 @@ img:hover {
   height: 100vh;
 }
 
+p{
+  position: absolute;
+  left: 300px;
+  top: 500px;
+  font-size: 50px;
+  color: white;
+}
 
-main{
+body{
   position: relative;
+  background-color: green;
 }
 
 .playerHand{
   position: absolute;
   display: flex;
+  left: 200px;
+  width: 100%;
 }
 
 .bottom{
-  top: 300px;
+  top: 700px;
+}
+
+.top{
+  top: 350px;
 }
 
 .progress {
   margin: 40px;
   width: 0%;
   height: 100%;
-  background-color: #4caf50;
+  background-color: orange;
   border-radius: 10px;
-  animation: progress 5s linear forwards;
+  animation: progress 45s linear forwards;
 }
+
+.time{
+  color: white;
+  left: 250px;
+  position: absolute;
+  font-size: 45px;
+}
+
+
 
