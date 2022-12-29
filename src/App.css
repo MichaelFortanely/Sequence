@@ -31,6 +31,7 @@ img:hover {
 
 .chip-container{
   position: absolute;
+  display: none;  /*FIRST ITEM*/
 }
 
 .pokerchip {
@@ -124,14 +125,21 @@ img:hover {
   border-radius: 10px;
   overflow: hidden;
 }
-
+.App{
+  display: none; /*SECOND ITEM*/
+}
 #pane{
+  display: none; /*THRIRD AND FINAL ITEM*/
   position: absolute;
   left: 700px;
   /* border-style: dashed; */
   width: 60vw;
   top: 0px;
   height: 100vh;
+}
+
+.radio-buttons p{
+  position: relative;
 }
 
 p{
@@ -144,7 +152,8 @@ p{
 
 body{
   position: relative;
-  background-color: green;
+  /*background-color: green; * NEED TO CHANGE THIS BACK TO GREEN LATER*/
+  background-color: whitesmoke;
 }
 
 .playerHand{
@@ -189,6 +198,37 @@ body{
   border-style: solid;
   border-width: 2px;
   border-color: green;
+}
+
+main{
+  position: relative;
+}
+
+.popup-window{
+  border-style: solid;
+  border-width: 3px;
+  border-color: gray;
+  background-color: aqua;
+  position: absolute;
+  display: flex;
+  width: 20ww;
+  height: 15vh;
+  border-radius: 10px;
+  left: 700px;
+  top: 300px;
+}
+
+.radio-buttons{
+  /* flex-grow: .5; */
+  padding: 10px;
+  margin: 15px;
+}
+
+.submit{
+  height: 20%;
+  position: relative;
+  top: 60px;
+  right: 5px;
 }
 
 /* create a key frame animation to move the card slightly up when it is selected*/

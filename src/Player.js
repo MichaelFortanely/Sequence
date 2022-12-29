@@ -1,21 +1,23 @@
 import React from 'react'
 import Card from './Card'
 
-const Player = ({cards, setHand, orientation, selected, setSelected}) => {
+const Player = ({cards, orientation, setSelected}) => {
     if(orientation === 'top'){
   return (
     <div className='playerHand top'>
         {cards.map(function(card){
-                return <Card selected={selected} setSelected={setSelected} cardName={card}/>
+                return <Card setSelected={setSelected} cardName={card}/>
                 })}
     </div>
   )
 }
 else{
+    let x = -1
     return (
         <div className='playerHand bottom'>
             {cards.map(function(card){
-                    return  <Card selected={selected} setSelected={setSelected} cardName={card}/>
+                    x += 1
+                    return  <Card index={x} setSelected={setSelected} cardName={card}/>
                     })}
         </div>
       )
