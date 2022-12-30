@@ -4,6 +4,8 @@ import FlexRow from './FlexRow';
 import SequenceBoard from './SequenceBoard';
 import Player from './Player'
 import Popup from './Popup';
+import History from './History';
+import { ExamineWin } from './ExamineWin';
 
 function App() {
   
@@ -48,7 +50,7 @@ function App() {
     ['ace_of_diamonds.png', '7_of_diamonds.png', '8_of_diamonds.png', '10_of_diamonds.png', 'king_of_diamonds.png', 'king_of_hearts.png', '10_of_hearts.png', '8_of_hearts.png', '7_of_hearts.png', 'ace_of_hearts.png'],
     ['ace_of_hearts.png', '7_of_hearts.png', '8_of_hearts.png', '10_of_hearts.png', 'king_of_hearts.png', 'king_of_diamonds.png', '10_of_diamonds.png', '8_of_diamonds.png', '7_of_diamonds.png', 'ace_of_diamonds.png'],
     ['2_of_hearts.png', '6_of_hearts.png', '9_of_hearts.png', 'queen_of_hearts.png', '10_of_clubs.png', '10_of_spades.png', 'queen_of_diamonds.png', '9_of_diamonds.png', '6_of_diamonds.png', '2_of_diamonds.png'],
-    ['3_of_hearts.png', '4_of_hearts.png', 'queen_of_clubs.png', '9_of_clubs.png', '8_of_clubs.png', '8_of_spades.png', '9_of_spades.png', 'queen_of_spades.png', '5_of_diamonds.png', '3_of_diamonds.png'],
+    ['3_of_hearts.png', '5_of_hearts.png', 'queen_of_clubs.png', '9_of_clubs.png', '8_of_clubs.png', '8_of_spades.png', '9_of_spades.png', 'queen_of_spades.png', '5_of_diamonds.png', '3_of_diamonds.png'],
     ['4_of_hearts.png', 'king_of_clubs.png', '5_of_clubs.png', '6_of_clubs.png', '7_of_clubs.png', '7_of_spades.png', '6_of_spades.png', '5_of_spades.png', 'king_of_spades.png', '4_of_diamonds.png'],
     ['black_joker.png', '4_of_clubs.png', '3_of_clubs.png', '2_of_clubs.png', 'ace_of_clubs.png', 'ace_of_spades.png', '2_of_spades.png', '3_of_spades.png', '4_of_spades.png', 'red_joker.png'],
   ]
@@ -60,6 +62,12 @@ function App() {
       const copy = [...cardsInDeck]
       const cardIndex = Math.floor(Math.random() * (cardsInDeck.length + 1))
       returnVal.push(cardsInDeck[cardIndex])
+      if(cardsInDeck[cardIndex] === undefined){
+        console.log('UNDEFINED CARD AT INDEX ' + cardIndex)
+        i -= 1
+        returnVal.splice(returnVal.length - 1)
+        continue
+      }
       copy.splice(cardIndex)
       if(copy.length === 0){
         setCardsInDeck(noJokerDeck)
@@ -113,9 +121,24 @@ function App() {
         element.classList.remove('black')
         element.classList.add(playerColor.toLowerCase())
         
+        //now must update the card of the player
+        const newCard = drawCards(1)[0]
+        bottomPlayerHand[selected] = newCard
+        // document.querySelector(`#card-${selected}`).alt = newCard
 
+
+        let logStream = document.querySelector('.log-stream')
+        let newPlayerMove = document.createElement('h4')
+
+        newPlayerMove.innerText = `You placed a ${cardSelected.slice(0, cardSelected.indexOf('.')).split('_').join(' ')} at coordinates (${chipCoords[0]}, ${chipCoords[1]}).`
+        logStream.prepend(newPlayerMove)
+        // console.log(chipToNum[playerColor.toLowerCase()], playerColor.toLowerCase())
+        if(ExamineWin(chipToNum[playerColor.toLowerCase()], grid) === true){
+          alert('You win!')
+        }
+        
         //now make the computer take a turn
-        console.log(topPlayerHand)
+        //this triple for loop calculates all possible moves for the computer
         const possibleMoves = []
         for(let i = 0; i < 10; i += 1){
           for(let j = 0; j < 10; j += 1){
@@ -130,18 +153,40 @@ function App() {
             }
           }
         }
-        // console.log(possibleMoves)
-        // console.log(possibleMoves[Math.floor(Math.random() * possibleMoves.length)])
+
+        //get the chip at the position that the computer wants plays its random move at
+        if(possibleMoves.length === 0){
+          alert('Computer out of possible Moves!!')
+        }
+        console.log(possibleMoves)
         const nextMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]
-        // console.log(nextMove.slice(0, 3))
-        const computer_coords = document.getElementById(nextMove.slice(0, 3))
-        // grid[Integer.parseInt(nextMove.slice(0, 1))]
         console.log(nextMove)
-        grid[parseInt(nextMove.slice(0, 1))][parseInt(nextMove.slice(2, 3))] = chipToNum[computerColor.toLowerCase()]
-        console.log(grid[parseInt(nextMove.slice(0, 1))])
+        const computer_coords = document.getElementById(nextMove.slice(0, 3))
+        console.log(computer_coords)
+        
+        //update grid
+        const compXCoord = parseInt(nextMove.slice(0, 1))
+        const compYCoord = parseInt(nextMove.slice(2, 3))
+        grid[compXCoord][compYCoord] = chipToNum[computerColor.toLowerCase()]
+        // console.log(grid[parseInt(nextMove.slice(0, 1))])
+
+        //change chip to computerColor
         computer_coords.style.display = ''
         computer_coords.classList.remove('black')
         computer_coords.classList.add(computerColor.toLowerCase())
+        const someCard = nameRows[compXCoord][compYCoord]
+        let newComputerMove = document.createElement('h4')
+
+        newComputerMove.innerText = `Computer placed a ${someCard.slice(0, someCard.indexOf('.')).split('_').join(' ')} at coordinates (${compXCoord}, ${compYCoord}).`
+        logStream.prepend(newComputerMove)
+        while(logStream.childNodes.length > 15){
+          logStream.removeChild(logStream.lastChild)
+        }
+        topPlayerHand[parseInt(nextMove.slice(4, 5))] = drawCards(1)[0]
+        if(ExamineWin(chipToNum[computerColor.toLowerCase()], grid) === true){
+          alert('You Lost!')
+        }
+        
       }
     }
     //do not modify chip coords in here
@@ -152,6 +197,7 @@ function App() {
       document.querySelector('form').style.display = 'none'
       document.querySelector('body').style.background = 'green'
       document.querySelector('#pane').style.display = 'inline-block'
+      document.querySelector('.history-log').style.display = 'inline-block'
     }
   }, [valid])
 
@@ -161,6 +207,7 @@ function App() {
 
   return (
     <main>
+      <History playerColor={playerColor} computerColor={computerColor}/>
       <Popup setValid={setValid} setComputerColor={setComputerColor} setPlayerColor={setPlayerColor}/>
       <table className="App">
         {[...Array(10).keys()].map(row => <FlexRow playerColor={playerColor} chipCoords={chipCoords} setChipCoords={setChipCoords} row={row} names={nameRows[row]} grid={grid}/>)}

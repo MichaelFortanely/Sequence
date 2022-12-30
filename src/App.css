@@ -161,11 +161,11 @@ body{
 }
 
 .bottom{
-  top: 300px;
+  top: 100px;
 }
 
 .top{
-  top: 350px;
+  top: 150px;
   display: none;
 }
 
@@ -230,3 +230,30 @@ main{
 
 /* create a key frame animation to move the card slightly up when it is selected*/
 
+.history-log{
+  border-style: solid;
+  border-width: 3px;
+  border-color: gray;
+  background-color: salmon;
+  position: absolute;
+  display: none;
+  width: 40vw;
+  height: 60vh;
+  border-radius: 10px;
+  left: 800px;
+  top: 300px;
+  padding: 10px;
+}
+
+.log-stream{
+  overflow-y: scroll; 
+  height:100%;
+  position: relative;
+  padding: 10px;
+  margin: 30px;
+  height:450px;
+}
+
+h4{
+  margin: 10px;
+}
