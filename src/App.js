@@ -10,6 +10,9 @@ import { ExamineWin } from './ExamineWin';
 function App() {
   
   const namesOfAllCards = ['10_of_clubs.png', '10_of_diamonds.png', '10_of_hearts.png', '10_of_spades.png', '2_of_clubs.png', '2_of_diamonds.png', '2_of_hearts.png', '2_of_spades.png', '3_of_clubs.png', '3_of_diamonds.png', '3_of_hearts.png', '3_of_spades.png', '4_of_clubs.png', '4_of_diamonds.png', '4_of_hearts.png', '4_of_spades.png', '5_of_clubs.png', '5_of_diamonds.png', '5_of_hearts.png', '5_of_spades.png', '6_of_clubs.png', '6_of_diamonds.png', '6_of_hearts.png', '6_of_spades.png', '7_of_clubs.png', '7_of_diamonds.png', '7_of_hearts.png', '7_of_spades.png', '8_of_clubs.png', '8_of_diamonds.png', '8_of_hearts.png', '8_of_spades.png', '9_of_clubs.png', '9_of_diamonds.png', '9_of_hearts.png', '9_of_spades.png', 'ace_of_clubs.png', 'ace_of_diamonds.png', 'ace_of_hearts.png', 'ace_of_spades.png', 'black_joker.png', 'jack_of_clubs.png', 'jack_of_diamonds.png', 'jack_of_hearts.png', 'jack_of_spades.png', 'king_of_clubs.png', 'king_of_diamonds.png', 'king_of_hearts.png', 'king_of_spades.png', 'queen_of_clubs.png', 'queen_of_diamonds.png', 'queen_of_hearts.png', 'queen_of_spades.png', 'red_joker.png', '10_of_clubs.png', '10_of_diamonds.png', '10_of_hearts.png', '10_of_spades.png', '2_of_clubs.png', '2_of_diamonds.png', '2_of_hearts.png', '2_of_spades.png', '3_of_clubs.png', '3_of_diamonds.png', '3_of_hearts.png', '3_of_spades.png', '4_of_clubs.png', '4_of_diamonds.png', '4_of_hearts.png', '4_of_spades.png', '5_of_clubs.png', '5_of_diamonds.png', '5_of_hearts.png', '5_of_spades.png', '6_of_clubs.png', '6_of_diamonds.png', '6_of_hearts.png', '6_of_spades.png', '7_of_clubs.png', '7_of_diamonds.png', '7_of_hearts.png', '7_of_spades.png', '8_of_clubs.png', '8_of_diamonds.png', '8_of_hearts.png', '8_of_spades.png', '9_of_clubs.png', '9_of_diamonds.png', '9_of_hearts.png', '9_of_spades.png', 'ace_of_clubs.png', 'ace_of_diamonds.png', 'ace_of_hearts.png', 'ace_of_spades.png', 'black_joker.png', 'jack_of_clubs.png', 'jack_of_diamonds.png', 'jack_of_hearts.png', 'jack_of_spades.png', 'king_of_clubs.png', 'king_of_diamonds.png', 'king_of_hearts.png', 'king_of_spades.png', 'queen_of_clubs.png', 'queen_of_diamonds.png', 'queen_of_hearts.png', 'queen_of_spades.png', 'red_joker.png',]
+  // for(let i = 0; i < namesOfAllCards.length/2; i += 1){
+  //     namesOfAllCards[i] = 'jack_of_diamonds.png'
+  //   }
   const noJokerDeck = namesOfAllCards.filter(name => !name.includes('joker'))
   //need to filter out the jokers of the playing card deck
   const [cardsInDeck, setCardsInDeck] = useState([...noJokerDeck])
@@ -112,9 +115,38 @@ function App() {
     if(chipCoords[0] !== -1 && selected !== 'None'){
       const cardSelected = bottomPlayerHand[selected]
       const cardInGrid = nameRows[chipCoords[0]][chipCoords[1]]
-
-      if(cardSelected === cardInGrid){
+      console.log(cardSelected)
+      if(cardSelected === cardInGrid || cardSelected.indexOf('jack') !== -1){
         //this sets the color of player choice
+        // console.log(grid[chipCoords[0][chipCoords[1]]] === chipToNum[playerColor])
+        let playedRedJack = false
+        if(cardSelected.indexOf('jack') !== -1){
+          if(cardSelected.indexOf('hearts') !== -1 || cardSelected.indexOf('diamonds') !== -1){
+            //need to check that the selected card is computers card
+            console.log(grid[chipCoords[0]][chipCoords[1]], chipToNum[computerColor.toLowerCase()])
+            console.log('RED JACK')
+            if(grid[chipCoords[0]][chipCoords[1]] !== chipToNum[computerColor.toLowerCase()]){
+              return
+            }
+            playedRedJack = true
+          } else{
+            //just check that the space is open
+            console.log('hereeeee')
+            console.log(grid[chipCoords[0][chipCoords[1]]], chipToNum['open'])
+            if(grid[chipCoords[0]][chipCoords[1]] !== chipToNum['open']){
+              return
+            }
+          }
+        }
+        console.log('heres')
+        if(playedRedJack){
+          grid[chipCoords[0]][chipCoords[1]] = 0
+          const element = document.getElementById(`${chipCoords[0]}-${chipCoords[1]}`)
+          element.style.display = 'none'
+          element.classList.add('black')
+          element.classList.remove(computerColor.toLowerCase())
+        }
+
         grid[chipCoords[0]][chipCoords[1]] = chipToNum[playerColor.toLowerCase()]
         const element = document.getElementById(`${chipCoords[0]}-${chipCoords[1]}`)
         element.style.display = ''
@@ -129,8 +161,11 @@ function App() {
 
         let logStream = document.querySelector('.log-stream')
         let newPlayerMove = document.createElement('h4')
-
-        newPlayerMove.innerText = `You placed a ${cardSelected.slice(0, cardSelected.indexOf('.')).split('_').join(' ')} at coordinates (${chipCoords[0]}, ${chipCoords[1]}).`
+        if(playedRedJack){
+          newPlayerMove.innerText = `You used a ${cardSelected.slice(0, cardSelected.indexOf('.')).split('_').join(' ')} to remove a chip at  (${chipCoords[0]}, ${chipCoords[1]}).`
+        } else{
+          newPlayerMove.innerText = `You placed a ${cardSelected.slice(0, cardSelected.indexOf('.')).split('_').join(' ')} at coordinates (${chipCoords[0]}, ${chipCoords[1]}).`
+        }
         logStream.prepend(newPlayerMove)
         // console.log(chipToNum[playerColor.toLowerCase()], playerColor.toLowerCase())
         if(ExamineWin(chipToNum[playerColor.toLowerCase()], grid) === true){
