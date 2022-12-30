@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Popup = ({setComputerColor, setPlayerColor}) => {
+const Popup = ({setValid, setComputerColor, setPlayerColor}) => {
   return (
    
 <form className='popup-window'>
@@ -28,7 +28,6 @@ const Popup = ({setComputerColor, setPlayerColor}) => {
     const nodes = document.querySelectorAll('input')
     const radioButtons = [...nodes].slice(0, 6)
     const checkedButtons = radioButtons.filter(button => button.checked)
-    console.log(checkedButtons)
     if((radioButtons[0].checked && radioButtons[3].checked) || (radioButtons[1].checked && radioButtons[4].checked) || (radioButtons[2].checked && radioButtons[5].checked)){
       alert("You can't use the same color for yourself and the computer")
     }else if(checkedButtons.length !== 2){
@@ -36,9 +35,8 @@ const Popup = ({setComputerColor, setPlayerColor}) => {
     } else{
       setPlayerColor(checkedButtons[0].value)
       setComputerColor(checkedButtons[1].value.slice(0, checkedButtons[1].value.length - 2))
+      setValid(true)
     }
-    // const radioButtons = [nodes[0], nodes[1]]
-    // console.log(radioButtons)
     }}/>
 </form>
   )

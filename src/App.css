@@ -31,7 +31,6 @@ img:hover {
 
 .chip-container{
   position: absolute;
-  display: none;  /*FIRST ITEM*/
 }
 
 .pokerchip {
@@ -125,9 +124,7 @@ img:hover {
   border-radius: 10px;
   overflow: hidden;
 }
-.App{
-  display: none; /*SECOND ITEM*/
-}
+
 #pane{
   display: none; /*THRIRD AND FINAL ITEM*/
   position: absolute;

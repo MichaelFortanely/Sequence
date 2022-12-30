@@ -23,6 +23,7 @@ function App() {
 
   const [playerColor, setPlayerColor] = useState('None')
   const [computerColor, setComputerColor] = useState('None')
+  const[valid, setValid] = useState(false)
 
   //mapping of colors colors to numbers
   const chipToNum = {
@@ -38,6 +39,19 @@ function App() {
   grid[9][0] = -1
   grid[9][9] = -1 
   //the actual playing grid
+
+  const nameRows = [
+    ['red_joker.png', '4_of_spades.png', '3_of_spades.png', '2_of_spades.png', 'ace_of_spades.png', 'ace_of_clubs.png', '2_of_clubs.png', '3_of_clubs.png', '4_of_clubs.png', 'black_joker.png'],
+    ['4_of_diamonds.png', 'king_of_spades.png', '5_of_spades.png', '6_of_spades.png', '7_of_spades.png', '7_of_clubs.png', '6_of_clubs.png', '5_of_clubs.png', 'king_of_clubs.png', '4_of_hearts.png'],
+    ['3_of_diamonds.png', '5_of_diamonds.png', 'queen_of_spades.png', '9_of_spades.png', '8_of_spades.png', '8_of_clubs.png', '9_of_clubs.png', 'queen_of_clubs.png', '5_of_hearts.png', '3_of_hearts.png'],
+    ['2_of_diamonds.png', '6_of_diamonds.png', '9_of_diamonds.png', 'queen_of_diamonds.png', '10_of_spades.png', '10_of_clubs.png', 'queen_of_hearts.png', '9_of_hearts.png', '6_of_hearts.png', '2_of_hearts.png'],
+    ['ace_of_diamonds.png', '7_of_diamonds.png', '8_of_diamonds.png', '10_of_diamonds.png', 'king_of_diamonds.png', 'king_of_hearts.png', '10_of_hearts.png', '8_of_hearts.png', '7_of_hearts.png', 'ace_of_hearts.png'],
+    ['ace_of_hearts.png', '7_of_hearts.png', '8_of_hearts.png', '10_of_hearts.png', 'king_of_hearts.png', 'king_of_diamonds.png', '10_of_diamonds.png', '8_of_diamonds.png', '7_of_diamonds.png', 'ace_of_diamonds.png'],
+    ['2_of_hearts.png', '6_of_hearts.png', '9_of_hearts.png', 'queen_of_hearts.png', '10_of_clubs.png', '10_of_spades.png', 'queen_of_diamonds.png', '9_of_diamonds.png', '6_of_diamonds.png', '2_of_diamonds.png'],
+    ['3_of_hearts.png', '4_of_hearts.png', 'queen_of_clubs.png', '9_of_clubs.png', '8_of_clubs.png', '8_of_spades.png', '9_of_spades.png', 'queen_of_spades.png', '5_of_diamonds.png', '3_of_diamonds.png'],
+    ['4_of_hearts.png', 'king_of_clubs.png', '5_of_clubs.png', '6_of_clubs.png', '7_of_clubs.png', '7_of_spades.png', '6_of_spades.png', '5_of_spades.png', 'king_of_spades.png', '4_of_diamonds.png'],
+    ['black_joker.png', '4_of_clubs.png', '3_of_clubs.png', '2_of_clubs.png', 'ace_of_clubs.png', 'ace_of_spades.png', '2_of_spades.png', '3_of_spades.png', '4_of_spades.png', 'red_joker.png'],
+  ]
 
   //draws x cards out of the deck for the player and takes care of replenishing the main playing deck
   const drawCards = (numCards) => {
@@ -87,32 +101,41 @@ function App() {
   }, [selected])
 
   useEffect(() => {
-    if(playerColor !== 'None' && computerColor !== 'None'){
-      console.log(playerColor, computerColor)
-      
+    if(chipCoords[0] !== -1 && selected !== 'None'){
+      const cardSelected = bottomPlayerHand[selected]
+      console.log(cardSelected) 
+      const cardInGrid = nameRows[chipCoords[0]][chipCoords[1]]
+      console.log(cardInGrid)
+
+      //this sets the color
+      if(cardSelected === cardInGrid){
+        grid[chipCoords[0]][chipCoords[1]] = chipToNum[playerColor.toLowerCase()]
+        const element = document.getElementById(`${chipCoords[0]}-${chipCoords[1]}`)
+        element.style.display = ''
+        element.classList.remove('black')
+        element.classList.add(playerColor.toLowerCase())
+      }
     }
-  }, [playerColor, computerColor])
+    //do not modift chip coords in here
+  }, [chipCoords[0], chipCoords[1], selected])
+
+  useEffect(() => {
+    if(valid){
+      document.querySelector('form').style.display = 'none'
+      document.querySelector('body').style.background = 'green'
+      document.querySelector('#pane').style.display = 'inline-block'
+    }
+  }, [valid])
 
 
   //hardcoded the order of all the cards on the playing board by specifying their names
-  const nameRows = [
-    ['red_joker.png', '4_of_spades.png', '3_of_spades.png', '2_of_spades.png', 'ace_of_spades.png', 'ace_of_clubs.png', '2_of_clubs.png', '3_of_clubs.png', '4_of_clubs.png', 'black_joker.png'],
-    ['4_of_diamonds.png', 'king_of_spades.png', '5_of_spades.png', '6_of_spades.png', '7_of_spades.png', '7_of_clubs.png', '6_of_clubs.png', '5_of_clubs.png', 'king_of_clubs.png', '4_of_hearts.png'],
-    ['3_of_diamonds.png', '5_of_diamonds.png', 'queen_of_spades.png', '9_of_spades.png', '8_of_spades.png', '8_of_clubs.png', '9_of_clubs.png', 'queen_of_clubs.png', '5_of_hearts.png', '3_of_hearts.png'],
-    ['2_of_diamonds.png', '6_of_diamonds.png', '9_of_diamonds.png', 'queen_of_diamonds.png', '10_of_spades.png', '10_of_clubs.png', 'queen_of_hearts.png', '9_of_hearts.png', '6_of_hearts.png', '2_of_hearts.png'],
-    ['ace_of_diamonds.png', '7_of_diamonds.png', '8_of_diamonds.png', '10_of_diamonds.png', 'king_of_diamonds.png', 'king_of_hearts.png', '10_of_hearts.png', '8_of_hearts.png', '7_of_hearts.png', 'ace_of_hearts.png'],
-    ['ace_of_hearts.png', '7_of_hearts.png', '8_of_hearts.png', '10_of_hearts.png', 'king_of_hearts.png', 'king_of_diamonds.png', '10_of_diamonds.png', '8_of_diamonds.png', '7_of_diamonds.png', 'ace_of_diamonds.png'],
-    ['2_of_hearts.png', '6_of_hearts.png', '9_of_hearts.png', 'queen_of_hearts.png', '10_of_clubs.png', '10_of_spades.png', 'queen_of_diamonds.png', '9_of_diamonds.png', '6_of_diamonds.png', '2_of_diamonds.png'],
-    ['3_of_hearts.png', '4_of_hearts.png', 'queen_of_clubs.png', '9_of_clubs.png', '8_of_clubs.png', '8_of_spades.png', '9_of_spades.png', 'queen_of_spades.png', '5_of_diamonds.png', '3_of_diamonds.png'],
-    ['4_of_hearts.png', 'king_of_clubs.png', '5_of_clubs.png', '6_of_clubs.png', '7_of_clubs.png', '7_of_spades.png', '6_of_spades.png', '5_of_spades.png', 'king_of_spades.png', '4_of_diamonds.png'],
-    ['black_joker.png', '4_of_clubs.png', '3_of_clubs.png', '2_of_clubs.png', 'ace_of_clubs.png', 'ace_of_spades.png', '2_of_spades.png', '3_of_spades.png', '4_of_spades.png', 'red_joker.png'],
-  ]
+  
 
   return (
     <main>
-      <Popup setComputerColor={setComputerColor} setPlayerColor={setPlayerColor}/>
+      <Popup setValid={setValid} setComputerColor={setComputerColor} setPlayerColor={setPlayerColor}/>
       <table className="App">
-        {[...Array(10).keys()].map(row => <FlexRow chipCoords={chipCoords} setChipCoords={setChipCoords} row={row} names={nameRows[row]} grid={grid}/>)}
+        {[...Array(10).keys()].map(row => <FlexRow playerColor={playerColor} chipCoords={chipCoords} setChipCoords={setChipCoords} row={row} names={nameRows[row]} grid={grid}/>)}
       </table>`
       <SequenceBoard chipToNum={chipToNum} setGrid={setGrid}/>
       <div id='pane'>
