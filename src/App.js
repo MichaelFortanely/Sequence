@@ -103,20 +103,48 @@ function App() {
   useEffect(() => {
     if(chipCoords[0] !== -1 && selected !== 'None'){
       const cardSelected = bottomPlayerHand[selected]
-      console.log(cardSelected) 
       const cardInGrid = nameRows[chipCoords[0]][chipCoords[1]]
-      console.log(cardInGrid)
 
-      //this sets the color
       if(cardSelected === cardInGrid){
+        //this sets the color of player choice
         grid[chipCoords[0]][chipCoords[1]] = chipToNum[playerColor.toLowerCase()]
         const element = document.getElementById(`${chipCoords[0]}-${chipCoords[1]}`)
         element.style.display = ''
         element.classList.remove('black')
         element.classList.add(playerColor.toLowerCase())
+        
+
+        //now make the computer take a turn
+        console.log(topPlayerHand)
+        const possibleMoves = []
+        for(let i = 0; i < 10; i += 1){
+          for(let j = 0; j < 10; j += 1){
+            if(grid[i][j] === 0){//if the space is open
+              for(let k = 0; k < 7; k += 1){
+                if(nameRows[i][j] === topPlayerHand[k]){
+                  // console.log(topPlayerHand[k])
+                  // console.log(i, j, k)
+                  possibleMoves.push(`${i}-${j}-${k}`)
+              }
+              }
+            }
+          }
+        }
+        // console.log(possibleMoves)
+        // console.log(possibleMoves[Math.floor(Math.random() * possibleMoves.length)])
+        const nextMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]
+        // console.log(nextMove.slice(0, 3))
+        const computer_coords = document.getElementById(nextMove.slice(0, 3))
+        // grid[Integer.parseInt(nextMove.slice(0, 1))]
+        console.log(nextMove)
+        grid[parseInt(nextMove.slice(0, 1))][parseInt(nextMove.slice(2, 3))] = chipToNum[computerColor.toLowerCase()]
+        console.log(grid[parseInt(nextMove.slice(0, 1))])
+        computer_coords.style.display = ''
+        computer_coords.classList.remove('black')
+        computer_coords.classList.add(computerColor.toLowerCase())
       }
     }
-    //do not modift chip coords in here
+    //do not modify chip coords in here
   }, [chipCoords[0], chipCoords[1], selected])
 
   useEffect(() => {
