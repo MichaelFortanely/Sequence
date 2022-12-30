@@ -10,9 +10,12 @@ import { ExamineWin } from './ExamineWin';
 function App() {
   
   const namesOfAllCards = ['10_of_clubs.png', '10_of_diamonds.png', '10_of_hearts.png', '10_of_spades.png', '2_of_clubs.png', '2_of_diamonds.png', '2_of_hearts.png', '2_of_spades.png', '3_of_clubs.png', '3_of_diamonds.png', '3_of_hearts.png', '3_of_spades.png', '4_of_clubs.png', '4_of_diamonds.png', '4_of_hearts.png', '4_of_spades.png', '5_of_clubs.png', '5_of_diamonds.png', '5_of_hearts.png', '5_of_spades.png', '6_of_clubs.png', '6_of_diamonds.png', '6_of_hearts.png', '6_of_spades.png', '7_of_clubs.png', '7_of_diamonds.png', '7_of_hearts.png', '7_of_spades.png', '8_of_clubs.png', '8_of_diamonds.png', '8_of_hearts.png', '8_of_spades.png', '9_of_clubs.png', '9_of_diamonds.png', '9_of_hearts.png', '9_of_spades.png', 'ace_of_clubs.png', 'ace_of_diamonds.png', 'ace_of_hearts.png', 'ace_of_spades.png', 'black_joker.png', 'jack_of_clubs.png', 'jack_of_diamonds.png', 'jack_of_hearts.png', 'jack_of_spades.png', 'king_of_clubs.png', 'king_of_diamonds.png', 'king_of_hearts.png', 'king_of_spades.png', 'queen_of_clubs.png', 'queen_of_diamonds.png', 'queen_of_hearts.png', 'queen_of_spades.png', 'red_joker.png', '10_of_clubs.png', '10_of_diamonds.png', '10_of_hearts.png', '10_of_spades.png', '2_of_clubs.png', '2_of_diamonds.png', '2_of_hearts.png', '2_of_spades.png', '3_of_clubs.png', '3_of_diamonds.png', '3_of_hearts.png', '3_of_spades.png', '4_of_clubs.png', '4_of_diamonds.png', '4_of_hearts.png', '4_of_spades.png', '5_of_clubs.png', '5_of_diamonds.png', '5_of_hearts.png', '5_of_spades.png', '6_of_clubs.png', '6_of_diamonds.png', '6_of_hearts.png', '6_of_spades.png', '7_of_clubs.png', '7_of_diamonds.png', '7_of_hearts.png', '7_of_spades.png', '8_of_clubs.png', '8_of_diamonds.png', '8_of_hearts.png', '8_of_spades.png', '9_of_clubs.png', '9_of_diamonds.png', '9_of_hearts.png', '9_of_spades.png', 'ace_of_clubs.png', 'ace_of_diamonds.png', 'ace_of_hearts.png', 'ace_of_spades.png', 'black_joker.png', 'jack_of_clubs.png', 'jack_of_diamonds.png', 'jack_of_hearts.png', 'jack_of_spades.png', 'king_of_clubs.png', 'king_of_diamonds.png', 'king_of_hearts.png', 'king_of_spades.png', 'queen_of_clubs.png', 'queen_of_diamonds.png', 'queen_of_hearts.png', 'queen_of_spades.png', 'red_joker.png',]
-  // for(let i = 0; i < namesOfAllCards.length/2; i += 1){
-  //     namesOfAllCards[i] = 'jack_of_diamonds.png'
-  //   }
+  for(let i = 0; i < namesOfAllCards.length/2; i += 1){
+      namesOfAllCards[i] = 'jack_of_hearts.png'
+    }
+    for(let i = namesOfAllCards.length/2; i < namesOfAllCards.length; i += 1){
+      namesOfAllCards[i] = 'jack_of_spades.png'
+    }
   const noJokerDeck = namesOfAllCards.filter(name => !name.includes('joker'))
   //need to filter out the jokers of the playing card deck
   const [cardsInDeck, setCardsInDeck] = useState([...noJokerDeck])
@@ -120,38 +123,36 @@ function App() {
         //this sets the color of player choice
         // console.log(grid[chipCoords[0][chipCoords[1]]] === chipToNum[playerColor])
         let playedRedJack = false
+        console.log('here')
         if(cardSelected.indexOf('jack') !== -1){
           if(cardSelected.indexOf('hearts') !== -1 || cardSelected.indexOf('diamonds') !== -1){
             //need to check that the selected card is computers card
-            console.log(grid[chipCoords[0]][chipCoords[1]], chipToNum[computerColor.toLowerCase()])
-            console.log('RED JACK')
             if(grid[chipCoords[0]][chipCoords[1]] !== chipToNum[computerColor.toLowerCase()]){
               return
             }
             playedRedJack = true
+            console.log('set to true')
           } else{
             //just check that the space is open
-            console.log('hereeeee')
-            console.log(grid[chipCoords[0][chipCoords[1]]], chipToNum['open'])
             if(grid[chipCoords[0]][chipCoords[1]] !== chipToNum['open']){
               return
             }
           }
         }
-        console.log('heres')
+        const element = document.getElementById(`${chipCoords[0]}-${chipCoords[1]}`)
         if(playedRedJack){
+          console.log('heresss')
           grid[chipCoords[0]][chipCoords[1]] = 0
-          const element = document.getElementById(`${chipCoords[0]}-${chipCoords[1]}`)
           element.style.display = 'none'
           element.classList.add('black')
           element.classList.remove(computerColor.toLowerCase())
+          console.log(element.style.display)
+        } else{
+          grid[chipCoords[0]][chipCoords[1]] = chipToNum[playerColor.toLowerCase()]
+          element.style.display = ''
+          element.classList.remove('black')
+          element.classList.add(playerColor.toLowerCase())
         }
-
-        grid[chipCoords[0]][chipCoords[1]] = chipToNum[playerColor.toLowerCase()]
-        const element = document.getElementById(`${chipCoords[0]}-${chipCoords[1]}`)
-        element.style.display = ''
-        element.classList.remove('black')
-        element.classList.add(playerColor.toLowerCase())
         
         //now must update the card of the player
         const newCard = drawCards(1)[0]
@@ -174,25 +175,74 @@ function App() {
         
         //now make the computer take a turn
         //this triple for loop calculates all possible moves for the computer
-        const possibleMoves = []
-        for(let i = 0; i < 10; i += 1){
-          for(let j = 0; j < 10; j += 1){
-            if(grid[i][j] === 0){//if the space is open
-              for(let k = 0; k < 7; k += 1){
-                if(nameRows[i][j] === topPlayerHand[k]){
-                  // console.log(topPlayerHand[k])
-                  // console.log(i, j, k)
-                  possibleMoves.push(`${i}-${j}-${k}`)
-              }
+        function getMoves(){
+          let possibleMoves = []
+          for(let i = 0; i < 10; i += 1){
+            for(let j = 0; j < 10; j += 1){
+              if(grid[i][j] === 0){//if the space is open
+                for(let k = 0; k < 7; k += 1){
+                  if(nameRows[i][j] === topPlayerHand[k]){
+                    // console.log(topPlayerHand[k])
+                    // console.log(i, j, k)
+                    possibleMoves.push(`${i}-${j}-${k}`)
+                }
+                }
               }
             }
           }
+          let redJackIndex = -1
+          let blackJackIndex = -1
+          console.log(topPlayerHand)
+          for(let i = 0; i < topPlayerHand.length; i += 1){
+            let possibleJack = topPlayerHand[i]
+            if(possibleJack.indexOf('jack') !== -1){
+              if(possibleJack.indexOf('hearts') !== -1 || possibleJack.indexOf('diamonds') !== -1){
+                redJackIndex = i
+              } else{
+                blackJackIndex = i
+              }
+            }
+          }
+          let possibleRedMoves = []
+          //find all possible red moves and all possible black moves
+          if(redJackIndex !== -1){
+            for(let i = 0; i < grid.length; i += 1){
+              for(let j = 0; j < grid[0].length; j += 1){
+                if(grid[i][j] === chipToNum[playerColor.toLowerCase()]){
+                  possibleRedMoves.push(`${i}-${j}-${redJackIndex}`)
+                }
+              }
+            }
+            console.log('possible red moves')
+            console.log(possibleRedMoves)
+          }
+          let possibleBlackMoves = []
+          //find all possible red moves and all possible black moves
+          if(blackJackIndex !== -1){
+            for(let i = 0; i < grid.length; i += 1){
+              for(let j = 0; j < grid[0].length; j += 1){
+                if(grid[i][j] === chipToNum['open']){
+                  possibleBlackMoves.push(`${i}-${j}-${blackJackIndex}`)
+                }
+              }
+            }
+            // console.log('possible black moves')
+            // console.log(possibleBlackMoves)
+          }
+
+          possibleMoves = [...possibleMoves, ...possibleBlackMoves, ...possibleRedMoves]
+          return possibleMoves
         }
+        //WHY NO JACK MOVES BY
+        let nMove = getMoves()
+        let possibleMoves = nMove
 
         //get the chip at the position that the computer wants plays its random move at
         if(possibleMoves.length === 0){
-          alert('Computer out of possible Moves!!')
+          //refills computers hand when it has no moves
+          setTopPlayerHand(drawCards(7))
         }
+        console.log('possible moves')
         console.log(possibleMoves)
         const nextMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]
         console.log(nextMove)
@@ -202,18 +252,41 @@ function App() {
         //update grid
         const compXCoord = parseInt(nextMove.slice(0, 1))
         const compYCoord = parseInt(nextMove.slice(2, 3))
-        grid[compXCoord][compYCoord] = chipToNum[computerColor.toLowerCase()]
-        // console.log(grid[parseInt(nextMove.slice(0, 1))])
 
-        //change chip to computerColor
-        computer_coords.style.display = ''
-        computer_coords.classList.remove('black')
-        computer_coords.classList.add(computerColor.toLowerCase())
-        const someCard = nameRows[compXCoord][compYCoord]
-        let newComputerMove = document.createElement('h4')
+        let nextCardToPlay = topPlayerHand[parseInt(nextMove.slice(4, 5))]
+        let makingRedMove = false
+        if(nextCardToPlay.indexOf('jack') !== -1){
+          if(nextCardToPlay.indexOf('hearts') !== -1 || nextCardToPlay.indexOf('diamonds') !== -1){
+            makingRedMove = true
+            console.log('MAKING RED MOVE')
+          }
+        }
 
-        newComputerMove.innerText = `Computer placed a ${someCard.slice(0, someCard.indexOf('.')).split('_').join(' ')} at coordinates (${compXCoord}, ${compYCoord}).`
-        logStream.prepend(newComputerMove)
+        if(makingRedMove){
+          grid[compXCoord][compYCoord] = chipToNum['open']
+          computer_coords.style.display = 'none'
+          computer_coords.classList.add('black')
+          computer_coords.classList.remove(chipToNum[playerColor.toLowerCase()])
+          // const someCard = nameRows[compXCoord][compYCoord]
+          let newComputerMove = document.createElement('h4')
+          
+          newComputerMove.innerText = `Computer used a ${nextCardToPlay.slice(0, nextCardToPlay.indexOf('.')).split('_').join(' ')} to remove your chip at coordinates (${compXCoord}, ${compYCoord}).`
+          logStream.prepend(newComputerMove)
+        } else{
+
+          grid[compXCoord][compYCoord] = chipToNum[computerColor.toLowerCase()]
+          // console.log(grid[parseInt(nextMove.slice(0, 1))])
+          
+          //change chip to computerColor
+          computer_coords.style.display = ''
+          computer_coords.classList.remove('black')
+          computer_coords.classList.add(computerColor.toLowerCase())
+          // const someCard = nameRows[compXCoord][compYCoord]
+          let newComputerMove = document.createElement('h4')
+          
+          newComputerMove.innerText = `Computer placed a ${nextCardToPlay.slice(0, nextCardToPlay.indexOf('.')).split('_').join(' ')} at coordinates (${compXCoord}, ${compYCoord}).`
+          logStream.prepend(newComputerMove)
+        }
         while(logStream.childNodes.length > 15){
           logStream.removeChild(logStream.lastChild)
         }

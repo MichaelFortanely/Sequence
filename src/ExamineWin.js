@@ -1,4 +1,7 @@
 export function ExamineWin(colorNum, grid) {
+    //TODO THIS FUNCTION NEEDS TO BE DEBUGGED FURTHER
+
+
     // //check all of the row wins
     for(let i = 0; i < 10; i += 1){
         for(let j = 0; j < 6; j += 1){
