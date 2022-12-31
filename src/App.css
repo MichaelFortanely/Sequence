@@ -132,7 +132,7 @@ img:hover {
   /* border-style: dashed; */
   width: 60vw;
   top: 0px;
-  height: 100vh;
+  height: 30vh;
 }
 
 .radio-buttons p{
@@ -241,7 +241,7 @@ main{
   height: 60vh;
   border-radius: 10px;
   left: 800px;
-  top: 300px;
+  top: 350px;
   padding: 10px;
 }
 
@@ -255,4 +255,12 @@ main{
 
 h4{
   margin: 10px;
+}
+
+.recycle{
+  position: absolute;
+  left: 1000px;
+  top: 270px;
+  padding: 7px;
+  font-size: 15px;
 }

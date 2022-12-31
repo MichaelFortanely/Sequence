@@ -13,6 +13,7 @@ export function ExamineWin(colorNum, grid) {
                 }
             }
             if(found){
+                console.log('row victory')
                 return true
             }
         }
@@ -29,6 +30,7 @@ export function ExamineWin(colorNum, grid) {
                 }
             }
             if(found){
+                console.log('column victory')
                 return true
             }
         }
@@ -47,6 +49,7 @@ export function ExamineWin(colorNum, grid) {
                     }
                 }
                 if(found){
+                    console.log('slant upper left victory')
                     return true
                 }
             }
@@ -65,6 +68,7 @@ export function ExamineWin(colorNum, grid) {
                     }
                 }
                 if(found){
+                    console.log('slant upper right victory')
                     return true
                 }
             }

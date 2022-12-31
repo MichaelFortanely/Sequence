@@ -6,16 +6,19 @@ import Player from './Player'
 import Popup from './Popup';
 import History from './History';
 import { ExamineWin } from './ExamineWin';
+import RecycleButton from './RecycleButton';
+//TODO -> the player needs their own discard button, need to check win conditions, and need to swap the way coordinates are printed
+//and any other finishing touches
 
 function App() {
   
   const namesOfAllCards = ['10_of_clubs.png', '10_of_diamonds.png', '10_of_hearts.png', '10_of_spades.png', '2_of_clubs.png', '2_of_diamonds.png', '2_of_hearts.png', '2_of_spades.png', '3_of_clubs.png', '3_of_diamonds.png', '3_of_hearts.png', '3_of_spades.png', '4_of_clubs.png', '4_of_diamonds.png', '4_of_hearts.png', '4_of_spades.png', '5_of_clubs.png', '5_of_diamonds.png', '5_of_hearts.png', '5_of_spades.png', '6_of_clubs.png', '6_of_diamonds.png', '6_of_hearts.png', '6_of_spades.png', '7_of_clubs.png', '7_of_diamonds.png', '7_of_hearts.png', '7_of_spades.png', '8_of_clubs.png', '8_of_diamonds.png', '8_of_hearts.png', '8_of_spades.png', '9_of_clubs.png', '9_of_diamonds.png', '9_of_hearts.png', '9_of_spades.png', 'ace_of_clubs.png', 'ace_of_diamonds.png', 'ace_of_hearts.png', 'ace_of_spades.png', 'black_joker.png', 'jack_of_clubs.png', 'jack_of_diamonds.png', 'jack_of_hearts.png', 'jack_of_spades.png', 'king_of_clubs.png', 'king_of_diamonds.png', 'king_of_hearts.png', 'king_of_spades.png', 'queen_of_clubs.png', 'queen_of_diamonds.png', 'queen_of_hearts.png', 'queen_of_spades.png', 'red_joker.png', '10_of_clubs.png', '10_of_diamonds.png', '10_of_hearts.png', '10_of_spades.png', '2_of_clubs.png', '2_of_diamonds.png', '2_of_hearts.png', '2_of_spades.png', '3_of_clubs.png', '3_of_diamonds.png', '3_of_hearts.png', '3_of_spades.png', '4_of_clubs.png', '4_of_diamonds.png', '4_of_hearts.png', '4_of_spades.png', '5_of_clubs.png', '5_of_diamonds.png', '5_of_hearts.png', '5_of_spades.png', '6_of_clubs.png', '6_of_diamonds.png', '6_of_hearts.png', '6_of_spades.png', '7_of_clubs.png', '7_of_diamonds.png', '7_of_hearts.png', '7_of_spades.png', '8_of_clubs.png', '8_of_diamonds.png', '8_of_hearts.png', '8_of_spades.png', '9_of_clubs.png', '9_of_diamonds.png', '9_of_hearts.png', '9_of_spades.png', 'ace_of_clubs.png', 'ace_of_diamonds.png', 'ace_of_hearts.png', 'ace_of_spades.png', 'black_joker.png', 'jack_of_clubs.png', 'jack_of_diamonds.png', 'jack_of_hearts.png', 'jack_of_spades.png', 'king_of_clubs.png', 'king_of_diamonds.png', 'king_of_hearts.png', 'king_of_spades.png', 'queen_of_clubs.png', 'queen_of_diamonds.png', 'queen_of_hearts.png', 'queen_of_spades.png', 'red_joker.png',]
-  for(let i = 0; i < namesOfAllCards.length/2; i += 1){
-      namesOfAllCards[i] = 'jack_of_hearts.png'
-    }
-    for(let i = namesOfAllCards.length/2; i < namesOfAllCards.length; i += 1){
-      namesOfAllCards[i] = 'jack_of_spades.png'
-    }
+  // for(let i = 0; i < namesOfAllCards.length/2; i += 1){
+  //   namesOfAllCards[i] = 'jack_of_hearts.png'
+  // }
+  // for(let i = namesOfAllCards.length/2; i < namesOfAllCards.length; i += 1){
+  //   namesOfAllCards[i] = 'jack_of_spades.png'
+  // }
   const noJokerDeck = namesOfAllCards.filter(name => !name.includes('joker'))
   //need to filter out the jokers of the playing card deck
   const [cardsInDeck, setCardsInDeck] = useState([...noJokerDeck])
@@ -62,25 +65,40 @@ function App() {
   ]
 
   //draws x cards out of the deck for the player and takes care of replenishing the main playing deck
+
   const drawCards = (numCards) => {
+    //draw without replacement during each call
+    if(numCards === 0 || cardsInDeck.length === 0){
+      console.log('ERROR DRAWING CARDS! numcards '  + numCards + " cardsinDeck: ")
+      console.log(cardsInDeck)
+    }
     let returnVal = []
+    let copy = [...cardsInDeck]
+    let set = new Set([])
     for(let i = 0; i < numCards; i += 1){
-      const copy = [...cardsInDeck]
-      const cardIndex = Math.floor(Math.random() * (cardsInDeck.length + 1))
-      returnVal.push(cardsInDeck[cardIndex])
-      if(cardsInDeck[cardIndex] === undefined){
-        console.log('UNDEFINED CARD AT INDEX ' + cardIndex)
-        i -= 1
-        returnVal.splice(returnVal.length - 1)
-        continue
+      let cardIndex = Math.floor(Math.random() * (cardsInDeck.length))
+      while(set.has(cardIndex)){
+        cardIndex = Math.floor(Math.random() * (cardsInDeck.length))
+        set.add(cardIndex)
       }
+      console.log('random card index is ' + cardIndex)
+      console.log('random card returned is ' + cardsInDeck[cardIndex])
+      returnVal.push(cardsInDeck[cardIndex])
       copy.splice(cardIndex)
       if(copy.length === 0){
-        setCardsInDeck(noJokerDeck)
-      } else{
-        setCardsInDeck(copy)
+        copy = [...noJokerDeck]
+        set = new Set([])
       }
+
+      if(cardsInDeck[cardIndex] === undefined){
+        console.log('UNDEFINED CARD AT INDEX ' + cardIndex + " PANIC")
+        console.log(1/0)
+      }
+      
     }
+    setCardsInDeck(copy)
+    console.log('returning returnVal')
+    console.log(returnVal)
     return returnVal
   }
 
@@ -172,9 +190,30 @@ function App() {
         if(ExamineWin(chipToNum[playerColor.toLowerCase()], grid) === true){
           alert('You win!')
         }
-        
-        //now make the computer take a turn
+        computerTurn()
+      }
+    }
+    //do not modify chip coords in here
+  }, [chipCoords[0], chipCoords[1], selected])
+
+  useEffect(() => {
+    if(valid){
+      document.querySelector('.popup-window').style.display = 'none'
+      document.querySelector('body').style.background = 'green'
+      document.querySelector('#pane').style.display = 'inline-block'
+      document.querySelector('.history-log').style.display = 'inline-block'
+    }
+  }, [valid])
+
+
+  //hardcoded the order of all the cards on the playing board by specifying their names
+
+
+
+  function computerTurn(){
+    //now make the computer take a turn
         //this triple for loop calculates all possible moves for the computer
+        let logStream = document.querySelector('.log-stream')
         function getMoves(){
           let possibleMoves = []
           for(let i = 0; i < 10; i += 1){
@@ -234,25 +273,32 @@ function App() {
           return possibleMoves
         }
         //WHY NO JACK MOVES BY
-        let nMove = getMoves()
-        let possibleMoves = nMove
+        let possibleMoves = getMoves()
 
         //get the chip at the position that the computer wants plays its random move at
         if(possibleMoves.length === 0){
           //refills computers hand when it has no moves
-          setTopPlayerHand(drawCards(7))
+          console.log('no MOVES')
+          console.log('returned is ')
+          let returned = drawCards(7)
+          console.log('returned')
+          for(let i = 0; i < 7; i += 1){
+            topPlayerHand[i] = returned[i] 
+          }
+          console.log('reset computer hand')
+          console.log(topPlayerHand)
         }
         console.log('possible moves')
         console.log(possibleMoves)
         const nextMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]
-        console.log(nextMove)
+        // console.log(nextMove)
         const computer_coords = document.getElementById(nextMove.slice(0, 3))
-        console.log(computer_coords)
+        // console.log(computer_coords)
         
         //update grid
         const compXCoord = parseInt(nextMove.slice(0, 1))
         const compYCoord = parseInt(nextMove.slice(2, 3))
-
+        console.log(topPlayerHand)
         let nextCardToPlay = topPlayerHand[parseInt(nextMove.slice(4, 5))]
         let makingRedMove = false
         if(nextCardToPlay.indexOf('jack') !== -1){
@@ -294,31 +340,15 @@ function App() {
         if(ExamineWin(chipToNum[computerColor.toLowerCase()], grid) === true){
           alert('You Lost!')
         }
-        
-      }
-    }
-    //do not modify chip coords in here
-  }, [chipCoords[0], chipCoords[1], selected])
-
-  useEffect(() => {
-    if(valid){
-      document.querySelector('form').style.display = 'none'
-      document.querySelector('body').style.background = 'green'
-      document.querySelector('#pane').style.display = 'inline-block'
-      document.querySelector('.history-log').style.display = 'inline-block'
-    }
-  }, [valid])
-
-
-  //hardcoded the order of all the cards on the playing board by specifying their names
-  
+  }
 
   return (
     <main>
       <History playerColor={playerColor} computerColor={computerColor}/>
+      <RecycleButton computerTurn={computerTurn} setBottomPlayerHand={setBottomPlayerHand} bottomPlayerHand={bottomPlayerHand} drawCards={drawCards} selected={selected}/>
       <Popup setValid={setValid} setComputerColor={setComputerColor} setPlayerColor={setPlayerColor}/>
       <table className="App">
-        {[...Array(10).keys()].map(row => <FlexRow playerColor={playerColor} chipCoords={chipCoords} setChipCoords={setChipCoords} row={row} names={nameRows[row]} grid={grid}/>)}
+        {[...Array(10).keys()].map(row => <FlexRow chipCoords={chipCoords} setChipCoords={setChipCoords} row={row} names={nameRows[row]} grid={grid}/>)}
       </table>`
       <SequenceBoard chipToNum={chipToNum} setGrid={setGrid}/>
       <div id='pane'>
