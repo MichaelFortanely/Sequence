@@ -3,7 +3,10 @@ import React from 'react'
 const RecycleButton = ({setBottomPlayerHand, bottomPlayerHand, drawCards, selected, computerTurn}) => {
     function func(){
         if(selected !== 'None'){
-            computerTurn()
+            setTimeout(function() {
+                //your code to be executed after 1 second
+                computerTurn()
+              }, 1000);
             let rubbish = [...bottomPlayerHand]
             console.log(rubbish)
             let newCard = drawCards(1)[0]

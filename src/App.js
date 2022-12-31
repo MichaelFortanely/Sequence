@@ -181,16 +181,20 @@ function App() {
         let logStream = document.querySelector('.log-stream')
         let newPlayerMove = document.createElement('h4')
         if(playedRedJack){
-          newPlayerMove.innerText = `You used a ${cardSelected.slice(0, cardSelected.indexOf('.')).split('_').join(' ')} to remove a chip at  (${chipCoords[0]}, ${chipCoords[1]}).`
+          newPlayerMove.innerText = `You used a ${cardSelected.slice(0, cardSelected.indexOf('.')).split('_').join(' ')} to remove a chip at  (${chipCoords[1]}, ${chipCoords[0]}).`
         } else{
-          newPlayerMove.innerText = `You placed a ${cardSelected.slice(0, cardSelected.indexOf('.')).split('_').join(' ')} at coordinates (${chipCoords[0]}, ${chipCoords[1]}).`
+          newPlayerMove.innerText = `You placed a ${cardSelected.slice(0, cardSelected.indexOf('.')).split('_').join(' ')} at coordinates (${chipCoords[1]}, ${chipCoords[0]}).`
         }
         logStream.prepend(newPlayerMove)
         // console.log(chipToNum[playerColor.toLowerCase()], playerColor.toLowerCase())
         if(ExamineWin(chipToNum[playerColor.toLowerCase()], grid) === true){
           alert('You win!')
         }
-        computerTurn()
+        setTimeout(function() {
+          //your code to be executed after 1 second
+          computerTurn()
+        }, 1000);
+        
       }
     }
     //do not modify chip coords in here
@@ -317,7 +321,7 @@ function App() {
           // const someCard = nameRows[compXCoord][compYCoord]
           let newComputerMove = document.createElement('h4')
           
-          newComputerMove.innerText = `Computer used a ${nextCardToPlay.slice(0, nextCardToPlay.indexOf('.')).split('_').join(' ')} to remove your chip at coordinates (${compXCoord}, ${compYCoord}).`
+          newComputerMove.innerText = `Computer used a ${nextCardToPlay.slice(0, nextCardToPlay.indexOf('.')).split('_').join(' ')} to remove your chip at coordinates (${compYCoord}, ${compXCoord}).`
           logStream.prepend(newComputerMove)
         } else{
 
@@ -331,7 +335,7 @@ function App() {
           // const someCard = nameRows[compXCoord][compYCoord]
           let newComputerMove = document.createElement('h4')
           
-          newComputerMove.innerText = `Computer placed a ${nextCardToPlay.slice(0, nextCardToPlay.indexOf('.')).split('_').join(' ')} at coordinates (${compXCoord}, ${compYCoord}).`
+          newComputerMove.innerText = `Computer placed a ${nextCardToPlay.slice(0, nextCardToPlay.indexOf('.')).split('_').join(' ')} at coordinates (${compYCoord}, ${compXCoord}).`
           logStream.prepend(newComputerMove)
         }
         while(logStream.childNodes.length > 15){
