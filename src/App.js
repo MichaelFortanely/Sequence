@@ -66,6 +66,7 @@ function App() {
 
   //draws x cards out of the deck for the player and takes care of replenishing the main playing deck
 
+  let set = new Set([])
   const drawCards = (numCards) => {
     //draw without replacement during each call
     if(numCards === 0 || cardsInDeck.length === 0){
@@ -74,7 +75,6 @@ function App() {
     }
     let returnVal = []
     let copy = [...cardsInDeck]
-    let set = new Set([])
     for(let i = 0; i < numCards; i += 1){
       let cardIndex = Math.floor(Math.random() * (copy.length))
       while(set.has(cardIndex)){
@@ -84,13 +84,17 @@ function App() {
       console.log('random card index is ' + cardIndex)
       console.log('random card returned is ' + copy[cardIndex])
       returnVal.push(copy[cardIndex])
-      copy.splice(cardIndex)
       if(copy.length === 0){
         copy = [...noJokerDeck]
         set = new Set([])
       }
     }
-    setCardsInDeck(copy)
+    console.log('before')
+    console.log(copy)
+    console.log('filtered choices')
+    const filteredChoices = copy.filter(card =>  !set.has(copy.indexOf(card)))
+    console.log(filteredChoices)
+    setCardsInDeck(filteredChoices)
     console.log('returning returnVal')
     console.log(returnVal)
     return returnVal
@@ -100,8 +104,10 @@ function App() {
   const[started, setStarted] = useState(false)
   useEffect(() => {
     if(!started){
-      setTopPlayerHand(drawCards(7))
-      setBottomPlayerHand(drawCards(7))
+      const a = drawCards(7)
+      const b = drawCards(7)
+      setTopPlayerHand(a)
+      setBottomPlayerHand(b)
     }
     setStarted(true)
   }, [started])
