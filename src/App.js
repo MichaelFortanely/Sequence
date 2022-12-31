@@ -76,25 +76,19 @@ function App() {
     let copy = [...cardsInDeck]
     let set = new Set([])
     for(let i = 0; i < numCards; i += 1){
-      let cardIndex = Math.floor(Math.random() * (cardsInDeck.length))
+      let cardIndex = Math.floor(Math.random() * (copy.length))
       while(set.has(cardIndex)){
-        cardIndex = Math.floor(Math.random() * (cardsInDeck.length))
+        cardIndex = Math.floor(Math.random() * (copy.length))
         set.add(cardIndex)
       }
       console.log('random card index is ' + cardIndex)
-      console.log('random card returned is ' + cardsInDeck[cardIndex])
-      returnVal.push(cardsInDeck[cardIndex])
+      console.log('random card returned is ' + copy[cardIndex])
+      returnVal.push(copy[cardIndex])
       copy.splice(cardIndex)
       if(copy.length === 0){
         copy = [...noJokerDeck]
         set = new Set([])
       }
-
-      if(cardsInDeck[cardIndex] === undefined){
-        console.log('UNDEFINED CARD AT INDEX ' + cardIndex + " PANIC")
-        console.log(1/0)
-      }
-      
     }
     setCardsInDeck(copy)
     console.log('returning returnVal')
