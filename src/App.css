@@ -258,6 +258,7 @@ h4{
 }
 
 .recycle{
+  display: none;
   position: absolute;
   left: 1000px;
   top: 270px;

@@ -56,7 +56,7 @@ export function ExamineWin(colorNum, grid) {
         }
     }
 
-    // //slant to upper right
+    //slant to upper right
     for(let i = 4; i < 10; i += 1){//columns
         for(let j = 0; j < 6; j += 1){//rows
             for(let k = 0; k < Math.min(i - 3, 6 - j * 1); k += 1){
@@ -68,7 +68,7 @@ export function ExamineWin(colorNum, grid) {
                     }
                 }
                 if(found){
-                    console.log('slant upper right victory')
+                    console.log('slant upper victory')
                     return true
                 }
             }

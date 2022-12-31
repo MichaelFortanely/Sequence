@@ -199,6 +199,7 @@ function App() {
   useEffect(() => {
     if(valid){
       document.querySelector('.popup-window').style.display = 'none'
+      document.querySelector('.recycle').style.display = 'block'
       document.querySelector('body').style.background = 'green'
       document.querySelector('#pane').style.display = 'inline-block'
       document.querySelector('.history-log').style.display = 'inline-block'
@@ -281,10 +282,10 @@ function App() {
           console.log('no MOVES')
           console.log('returned is ')
           let returned = drawCards(7)
-          console.log('returned')
           for(let i = 0; i < 7; i += 1){
             topPlayerHand[i] = returned[i] 
           }
+          possibleMoves = getMoves()
           console.log('reset computer hand')
           console.log(topPlayerHand)
         }
