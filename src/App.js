@@ -7,18 +7,11 @@ import Popup from './Popup';
 import History from './History';
 import { ExamineWin } from './ExamineWin';
 import RecycleButton from './RecycleButton';
-//TODO -> the player needs their own discard button, need to check win conditions, and need to swap the way coordinates are printed
-//and any other finishing touches
+import { typeImplementation } from '@testing-library/user-event/dist/type/typeImplementation';
 
 function App() {
   
   const namesOfAllCards = ['10_of_clubs.png', '10_of_diamonds.png', '10_of_hearts.png', '10_of_spades.png', '2_of_clubs.png', '2_of_diamonds.png', '2_of_hearts.png', '2_of_spades.png', '3_of_clubs.png', '3_of_diamonds.png', '3_of_hearts.png', '3_of_spades.png', '4_of_clubs.png', '4_of_diamonds.png', '4_of_hearts.png', '4_of_spades.png', '5_of_clubs.png', '5_of_diamonds.png', '5_of_hearts.png', '5_of_spades.png', '6_of_clubs.png', '6_of_diamonds.png', '6_of_hearts.png', '6_of_spades.png', '7_of_clubs.png', '7_of_diamonds.png', '7_of_hearts.png', '7_of_spades.png', '8_of_clubs.png', '8_of_diamonds.png', '8_of_hearts.png', '8_of_spades.png', '9_of_clubs.png', '9_of_diamonds.png', '9_of_hearts.png', '9_of_spades.png', 'ace_of_clubs.png', 'ace_of_diamonds.png', 'ace_of_hearts.png', 'ace_of_spades.png', 'black_joker.png', 'jack_of_clubs.png', 'jack_of_diamonds.png', 'jack_of_hearts.png', 'jack_of_spades.png', 'king_of_clubs.png', 'king_of_diamonds.png', 'king_of_hearts.png', 'king_of_spades.png', 'queen_of_clubs.png', 'queen_of_diamonds.png', 'queen_of_hearts.png', 'queen_of_spades.png', 'red_joker.png', '10_of_clubs.png', '10_of_diamonds.png', '10_of_hearts.png', '10_of_spades.png', '2_of_clubs.png', '2_of_diamonds.png', '2_of_hearts.png', '2_of_spades.png', '3_of_clubs.png', '3_of_diamonds.png', '3_of_hearts.png', '3_of_spades.png', '4_of_clubs.png', '4_of_diamonds.png', '4_of_hearts.png', '4_of_spades.png', '5_of_clubs.png', '5_of_diamonds.png', '5_of_hearts.png', '5_of_spades.png', '6_of_clubs.png', '6_of_diamonds.png', '6_of_hearts.png', '6_of_spades.png', '7_of_clubs.png', '7_of_diamonds.png', '7_of_hearts.png', '7_of_spades.png', '8_of_clubs.png', '8_of_diamonds.png', '8_of_hearts.png', '8_of_spades.png', '9_of_clubs.png', '9_of_diamonds.png', '9_of_hearts.png', '9_of_spades.png', 'ace_of_clubs.png', 'ace_of_diamonds.png', 'ace_of_hearts.png', 'ace_of_spades.png', 'black_joker.png', 'jack_of_clubs.png', 'jack_of_diamonds.png', 'jack_of_hearts.png', 'jack_of_spades.png', 'king_of_clubs.png', 'king_of_diamonds.png', 'king_of_hearts.png', 'king_of_spades.png', 'queen_of_clubs.png', 'queen_of_diamonds.png', 'queen_of_hearts.png', 'queen_of_spades.png', 'red_joker.png',]
-  // for(let i = 0; i < namesOfAllCards.length/2; i += 1){
-  //   namesOfAllCards[i] = 'jack_of_hearts.png'
-  // }
-  // for(let i = namesOfAllCards.length/2; i < namesOfAllCards.length; i += 1){
-  //   namesOfAllCards[i] = 'jack_of_spades.png'
-  // }
   const noJokerDeck = namesOfAllCards.filter(name => !name.includes('joker'))
   //need to filter out the jokers of the playing card deck
   const [cardsInDeck, setCardsInDeck] = useState([...noJokerDeck])
@@ -81,22 +74,14 @@ function App() {
         cardIndex = Math.floor(Math.random() * (copy.length))
         set.add(cardIndex)
       }
-      console.log('random card index is ' + cardIndex)
-      console.log('random card returned is ' + copy[cardIndex])
       returnVal.push(copy[cardIndex])
       if(copy.length === 0){
         copy = [...noJokerDeck]
         set = new Set([])
       }
     }
-    console.log('before')
-    console.log(copy)
-    console.log('filtered choices')
     const filteredChoices = copy.filter(card =>  !set.has(copy.indexOf(card)))
-    console.log(filteredChoices)
     setCardsInDeck(filteredChoices)
-    console.log('returning returnVal')
-    console.log(returnVal)
     return returnVal
   }
 
@@ -104,6 +89,14 @@ function App() {
   const[started, setStarted] = useState(false)
   useEffect(() => {
     if(!started){
+      console.log('started parsed')
+      // console.log(topParsed[Object.keys(topParsed)])
+      // setTopPlayerHand(topParsed[Object.keys(topParse
+
+      localStorage.setItem('started', JSON.stringify({started: true}))
+    console.log(JSON.parse(localStorage.getItem('started')))
+
+
       const a = drawCards(7)
       const b = drawCards(7)
       setTopPlayerHand(a)
@@ -111,6 +104,36 @@ function App() {
     }
     setStarted(true)
   }, [started])
+
+
+  useEffect(() => {
+    console.log('STARING')
+    // console.log(JSON.parse(localStorage.getItem('grid')))
+    // console.log(JSON.parse(localStorage.getItem('top')))
+    let topStored = localStorage.getItem('top')
+    if(topStored != undefined){
+      console.log('top parsed')
+      const topParsed = JSON.parse(topStored)
+      console.log(topParsed[Object.keys(topParsed)])
+      setTopPlayerHand(topParsed[Object.keys(topParsed)])
+    }
+    let bottomStored = localStorage.getItem('bottom')
+    if(bottomStored != undefined){
+      console.log('bottom parsed')
+      const bottomParsed = JSON.parse(bottomStored)
+      console.log(bottomParsed[Object.keys(bottomParsed)], typeof bottomParsed)
+      setBottomPlayerHand(bottomParsed[Object.keys(bottomParsed)])
+    }
+    let started = localStorage.getItem('started')
+    console.log(JSON.parse(started))
+    if(started != undefined){
+      document.querySelector('.popup-window').style.display = 'none'
+      document.querySelector('.recycle').style.display = 'block'
+      document.querySelector('body').style.background = 'green'
+      document.querySelector('#pane').style.display = 'inline-block'
+      document.querySelector('.history-log').style.display = 'inline-block'
+    }
+  }, [])
 
   //handles the highlighting of cards on the board
   useEffect(() => {
@@ -132,16 +155,45 @@ function App() {
     }
   }, [selected])
 
+
+  useEffect(() => {
+    if(valid){
+      document.querySelector('.popup-window').style.display = 'none'
+      document.querySelector('.recycle').style.display = 'block'
+      document.querySelector('body').style.background = 'green'
+      document.querySelector('#pane').style.display = 'inline-block'
+      document.querySelector('.history-log').style.display = 'inline-block'
+    }
+  }, [valid])
+
+useEffect(() => {
+  if(topPlayerHand.length){
+  console.log('topPLayer')
+  // console.log(topObj)
+    localStorage.setItem('top', JSON.stringify({topPlayerHand: [...topPlayerHand]}))
+    console.log(JSON.parse(localStorage.getItem('top')))
+  }
+}, [topPlayerHand])
+useEffect(() => {
+  if(bottomPlayerHand.length){
+  console.log('bottomPLayer')
+  // console.log(bottomPlayerHand)
+  localStorage.setItem('bottom', JSON.stringify({bottomPlayerHand: [...bottomPlayerHand]}))
+  console.log(JSON.parse(localStorage.getItem('bottom')))
+  }
+}, [bottomPlayerHand])
+
+
+
+
   useEffect(() => {
     if(chipCoords[0] !== -1 && selected !== 'None'){
       const cardSelected = bottomPlayerHand[selected]
       const cardInGrid = nameRows[chipCoords[0]][chipCoords[1]]
-      console.log(cardSelected)
       if(cardSelected === cardInGrid || cardSelected.indexOf('jack') !== -1){
         //this sets the color of player choice
         // console.log(grid[chipCoords[0][chipCoords[1]]] === chipToNum[playerColor])
         let playedRedJack = false
-        console.log('here')
         if(cardSelected.indexOf('jack') !== -1){
           if(cardSelected.indexOf('hearts') !== -1 || cardSelected.indexOf('diamonds') !== -1){
             //need to check that the selected card is computers card
@@ -149,7 +201,6 @@ function App() {
               return
             }
             playedRedJack = true
-            console.log('set to true')
           } else{
             //just check that the space is open
             if(grid[chipCoords[0]][chipCoords[1]] !== chipToNum['open']){
@@ -159,12 +210,10 @@ function App() {
         }
         const element = document.getElementById(`${chipCoords[0]}-${chipCoords[1]}`)
         if(playedRedJack){
-          console.log('heresss')
           grid[chipCoords[0]][chipCoords[1]] = 0
           element.style.display = 'none'
           element.classList.add('black')
           element.classList.remove(computerColor.toLowerCase())
-          console.log(element.style.display)
         } else{
           grid[chipCoords[0]][chipCoords[1]] = chipToNum[playerColor.toLowerCase()]
           element.style.display = ''
@@ -174,7 +223,10 @@ function App() {
         
         //now must update the card of the player
         const newCard = drawCards(1)[0]
-        bottomPlayerHand[selected] = newCard
+        let beforeHand = [...bottomPlayerHand]
+        beforeHand[selected] = newCard
+        setBottomPlayerHand(beforeHand)
+        // bottomPlayerHand[selected] = newCard
         // document.querySelector(`#card-${selected}`).alt = newCard
 
 
@@ -186,8 +238,9 @@ function App() {
           newPlayerMove.innerText = `You placed a ${cardSelected.slice(0, cardSelected.indexOf('.')).split('_').join(' ')} at coordinates (${chipCoords[1]}, ${chipCoords[0]}).`
         }
         logStream.prepend(newPlayerMove)
-        // console.log(chipToNum[playerColor.toLowerCase()], playerColor.toLowerCase())
         if(ExamineWin(chipToNum[playerColor.toLowerCase()], grid) === true){
+          console.log('ended')
+          localStorage.clear()
           alert('You win!')
         }
         setTimeout(function() {
@@ -200,21 +253,6 @@ function App() {
     //do not modify chip coords in here
   }, [chipCoords[0], chipCoords[1], selected])
 
-  useEffect(() => {
-    if(valid){
-      document.querySelector('.popup-window').style.display = 'none'
-      document.querySelector('.recycle').style.display = 'block'
-      document.querySelector('body').style.background = 'green'
-      document.querySelector('#pane').style.display = 'inline-block'
-      document.querySelector('.history-log').style.display = 'inline-block'
-    }
-  }, [valid])
-
-
-  //hardcoded the order of all the cards on the playing board by specifying their names
-
-
-
   function computerTurn(){
     //now make the computer take a turn
         //this triple for loop calculates all possible moves for the computer
@@ -226,8 +264,6 @@ function App() {
               if(grid[i][j] === 0){//if the space is open
                 for(let k = 0; k < 7; k += 1){
                   if(nameRows[i][j] === topPlayerHand[k]){
-                    // console.log(topPlayerHand[k])
-                    // console.log(i, j, k)
                     possibleMoves.push(`${i}-${j}-${k}`)
                 }
                 }
@@ -257,8 +293,6 @@ function App() {
                 }
               }
             }
-            console.log('possible red moves')
-            console.log(possibleRedMoves)
           }
           let possibleBlackMoves = []
           //find all possible red moves and all possible black moves
@@ -283,18 +317,12 @@ function App() {
         //get the chip at the position that the computer wants plays its random move at
         if(possibleMoves.length === 0){
           //refills computers hand when it has no moves
-          console.log('no MOVES')
-          console.log('returned is ')
           let returned = drawCards(7)
           for(let i = 0; i < 7; i += 1){
             topPlayerHand[i] = returned[i] 
           }
           possibleMoves = getMoves()
-          console.log('reset computer hand')
-          console.log(topPlayerHand)
         }
-        console.log('possible moves')
-        console.log(possibleMoves)
         const nextMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]
         // console.log(nextMove)
         const computer_coords = document.getElementById(nextMove.slice(0, 3))
@@ -303,13 +331,11 @@ function App() {
         //update grid
         const compXCoord = parseInt(nextMove.slice(0, 1))
         const compYCoord = parseInt(nextMove.slice(2, 3))
-        console.log(topPlayerHand)
         let nextCardToPlay = topPlayerHand[parseInt(nextMove.slice(4, 5))]
         let makingRedMove = false
         if(nextCardToPlay.indexOf('jack') !== -1){
           if(nextCardToPlay.indexOf('hearts') !== -1 || nextCardToPlay.indexOf('diamonds') !== -1){
             makingRedMove = true
-            console.log('MAKING RED MOVE')
           }
         }
 
@@ -332,7 +358,6 @@ function App() {
           computer_coords.style.display = ''
           computer_coords.classList.remove('black')
           computer_coords.classList.add(computerColor.toLowerCase())
-          // const someCard = nameRows[compXCoord][compYCoord]
           let newComputerMove = document.createElement('h4')
           
           newComputerMove.innerText = `Computer placed a ${nextCardToPlay.slice(0, nextCardToPlay.indexOf('.')).split('_').join(' ')} at coordinates (${compYCoord}, ${compXCoord}).`
@@ -343,8 +368,10 @@ function App() {
         }
         topPlayerHand[parseInt(nextMove.slice(4, 5))] = drawCards(1)[0]
         if(ExamineWin(chipToNum[computerColor.toLowerCase()], grid) === true){
+          localStorage.clear()
           alert('You Lost!')
         }
+        setTopPlayerHand([...topPlayerHand])
   }
 
   return (
